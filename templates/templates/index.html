@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Recommender System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📰 News Recommender System</h1>
+        <form method="POST">
+            <input type="text" name="query" placeholder="Enter your query" required value="{{ query }}">
+            <button type="submit">Recommend</button>
+        </form>
+        {% if recommendations %}
+        <div class="results">
+            <h2>Top Recommendations:</h2>
+            {% for doc, sim in recommendations %}
+            <div class="result">
+                <p><strong>Similarity: {{ "%.2f"|format(sim*100) }}%</strong></p>
+                <p>{{ doc[:500] }}...</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
