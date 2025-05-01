@@ -1,0 +1,188 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #000000 !important; /* PURE BLACK BACKGROUND */
+    color: #ffffff !important;      /* PURE WHITE TEXT */
+}
+
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    background: #121212;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ffd700;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input[type="text"] {
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    background: #2c2c2c;
+    color: #fff;
+    width: 300px;
+    max-width: 80%;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+button {
+    padding: 12px 25px;
+    border-radius: 25px;
+    border: none;
+    background: #ffd700;
+    color: #1e1e1e;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+button:hover {
+    background: #fff;
+    color: #1e1e1e;
+    transform: scale(1.05);
+}
+
+.results {
+    padding: 50px 20px;
+    background: #000000;
+}
+
+.results h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #ffd700;
+}
+
+.result-card {
+    background: #1c1c1c;
+    margin: 15px auto;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease;
+}
+
+.result-card:hover {
+    transform: scale(1.02);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+    background: #121212;
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    color: #888;
+}
+
+footer a {
+    color: #ffd700;
+    text-decoration: none;
+}
+.dashboard {
+    padding: 20px;
+}
+
+.dashboard h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.dashboard form {
+    margin-bottom: 30px;
+}
+
+.dashboard input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.dashboard button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.dashboard button:hover {
+    background-color: #0056b3;
+}
+
+.recommendations, .live-news {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f9f9f9; /* Light background */
+    color: #000; /* Black text for light background */
+    transition: 0.3s;
+}
+
+.card:hover {
+    background-color: #f0f8ff; /* Slight blue on hover */
+    color: #000; /* Still black text on hover */
+}
+
+form label {
+    color: #000000; /* Black label text for readability */
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.signup-form {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 30px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: #000000; /* Black text inside form */
+}
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+    background-color: #fff;
+}
+
+.signup-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #004080;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div style="max-width: 400px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 10px;">
+    <h2 style="text-align: center; color: #004080;">Sign Up</h2>
+    <form method="POST">
+        <div style="margin-bottom: 15px;">
+            <label style="color: #000; font-weight: bold;">Username:</label>
+            <input type="text" name="username" required style="width: 100%; padding: 10px; margin-top: 5px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="color: #000; font-weight: bold;">Email:</label>
+            <input type="email" name="email" required style="width: 100%; padding: 10px; margin-top: 5px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label style="color: #000; font-weight: bold;">Password:</label>
+            <input type="password" name="password" required style="width: 100%; padding: 10px; margin-top: 5px;">
+        </div>
+        <button type="submit" style="width: 100%; padding: 10px; background: #004080; color: white; border: none; border-radius: 5px;">Register</button>
+    </form>
+    <p style="text-align: center; margin-top: 15px;">
+        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+    </p>
+</div>
+{% endblock %}

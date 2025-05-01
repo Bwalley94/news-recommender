@@ -1,30 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Recommender System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>📰 News Recommender System</h1>
-        <form method="POST">
-            <input type="text" name="query" placeholder="Enter your query" required value="{{ query }}">
-            <button type="submit">Recommend</button>
-        </form>
-        {% if recommendations %}
-        <div class="results">
-            <h2>Top Recommendations:</h2>
-            {% for doc, sim in recommendations %}
-            <div class="result">
-                <p><strong>Similarity: {{ "%.2f"|format(sim*100) }}%</strong></p>
-                <p>{{ doc[:500] }}...</p>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome to Your News Recommender</h2>
 
+<form method="POST">
+    <input type="text" name="query" placeholder="Enter your news interest" required>
+    <button type="submit">Get Recommendations</button>
+</form>
+
+{% if recommendations %}
+    <h3>Top Recommendations</h3>
+    <div class="card-container">
+        {% for doc, score, keywords in recommendations %}
+        <div class="card">
+            <p><strong>Relevance:</strong> {{ score }}%</p>
+            <p>{{ doc[:300] }}...</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- 💡 TF-IDF Explanation Button -->
+    <form action="{{ url_for('tfidf_details') }}" method="get" style="margin-top: 20px; text-align: center;">
+        <button type="submit" style="padding: 10px 15px; font-weight: bold;">
+            How were these results calculated?
+        </button>
+    </form>
+{% endif %}
+{% endblock %}

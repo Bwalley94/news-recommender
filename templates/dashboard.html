@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - News Recommender{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome, {{ current_user.email }} 👋</h1>
+
+    <form method="POST" action="/">
+        <input type="text" name="query" placeholder="Search for news..." required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Recommended News:</h2>
+    <div class="recommendations">
+        {% for doc, score, keywords in recommendations %}
+            <div class="card">
+                <p><strong>Relevance:</strong> {{ "%.2f"|format(score) }}%</p>
+                <p>{{ doc[:300] }}...</p>
+            </div>
+        {% else %}
+            <p>No recommendations yet. Try searching above!</p>
+        {% endfor %}
+    </div>
+
+    <h2>Trending News:</h2>
+    <div class="live-news">
+        {% for title, description, url in live_news %}
+            <div class="card">
+                <h3>{{ title }}</h3>
+                <p>{{ description }}</p>
+                <a href="{{ url }}" target="_blank">Read more</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}TF-IDF Explanation{% endblock %}
+{% block content %}
+<h2>TF-IDF Steps for: "{{ query }}"</h2>
+
+{% for doc_label, scores in result %}
+    <h3>{{ doc_label }}</h3>
+    <ul>
+        {% for term, score in scores %}
+            <li><strong>{{ term }}</strong>: {{ score }}</li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+<p><a href="{{ url_for('home') }}">⬅ Back to Dashboard</a></p>
+{% endblock %}

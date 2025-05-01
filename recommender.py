@@ -1,30 +1,52 @@
-# recommender.py
 import nltk
-from sklearn.datasets import fetch_20newsgroups
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import string
-from nltk.corpus import stopwords
-nltk.download('stopwords')
+import pandas as pd
+import spacy
+from rank_bm25 import BM25Okapi
+import requests
 
-# Load and preprocess data
-def preprocess(text):
-    stop_words = set(stopwords.words('english'))
-    text = text.lower()
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    tokens = [word for word in text.split() if word not in stop_words and word.isalpha()]
-    return ' '.join(tokens)
+# Load NLP model
+nlp = spacy.load("en_core_web_sm")
 
-news_data = fetch_20newsgroups(subset='all', remove=('headers', 'footers', 'quotes'))
-processed_docs = [preprocess(doc) for doc in news_data.data]
+# Load your cleaned CSV file
+df = pd.read_csv('Data/20newsgroups_data.csv')
 
-vectorizer = TfidfVectorizer(max_features=5000)
-X_tfidf = vectorizer.fit_transform(processed_docs)
+# Ensure there are no missing values in the 'text' column
+df = df.dropna(subset=['text'])
 
-# Recommendation function
-def recommend(query, top_n=5):
-    query_vec = vectorizer.transform([preprocess(query)])
-    similarity = cosine_similarity(query_vec, X_tfidf).flatten()
-    indices = similarity.argsort()[-top_n:][::-1]
-    recommendations = [(news_data.data[idx], similarity[idx]) for idx in indices]
+# Use the 'text' column as your corpus
+limited_docs = df['text'].tolist()  # Adjust slicing if needed, e.g., df['text'][:1000].tolist()
+
+# Preprocess documents: lowercased and tokenized
+processed_docs = [doc.lower() for doc in limited_docs]
+tokenized_corpus = [doc.split() for doc in processed_docs]
+
+# Initialize BM25 with the tokenized corpus
+bm25 = BM25Okapi(tokenized_corpus, k1=2.0, b=1.2)
+
+# Process user query: extract important keywords using spaCy NLP
+def process_query(query):
+    doc = nlp(query)
+    keywords = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+    return keywords
+
+# Intelligent recommender using BM25
+def recommend_intelligent(query, top_n=5):
+    keywords = process_query(query)
+    scores = bm25.get_scores(keywords)
+    indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_n]
+    recommendations = [(limited_docs[idx], scores[idx], keywords) for idx in indices]
     return recommendations
+
+# 🔥 LIVE NEWS FETCH FUNCTION
+NEWS_API_KEY = 'd3cf11b7508e4a5886bdc0a0971eb3ab'  # <--- Replace with your key!
+
+def fetch_live_news(topic='technology'):
+    url = f'https://newsapi.org/v2/top-headlines?q={topic}&language=en&pageSize=5&apiKey={NEWS_API_KEY}'
+    response = requests.get(url)
+    data = response.json()
+
+    if data['status'] == 'ok':
+        articles = data['articles']
+        return [(article['title'], article['description'], article['url']) for article in articles]
+    else:
+        return []

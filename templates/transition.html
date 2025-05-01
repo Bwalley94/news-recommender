@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+
+<div style="background-color: #f0f8ff; height: 100vh; text-align: center; padding-top: 80px;">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" id="logo" style="width: 200px; margin-bottom: 30px;">
+
+    <div>
+        <button id="playBtn" style="padding: 15px 30px; font-size: 18px; background-color: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer;">
+            🎵 Press to Start News Intro
+        </button>
+    </div>
+
+    <audio id="newsIntro">
+        <source src="{{ url_for('static', filename='sounds/news-intro.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<script>
+  const playBtn = document.getElementById('playBtn');
+  const logo = document.getElementById('logo');
+  const audio = document.getElementById('newsIntro');
+
+  playBtn.addEventListener('click', async () => {
+    try {
+      await audio.play();
+
+      // Animate logo
+      logo.style.animation = 'bounce-in 2s ease-in-out forwards';
+
+      // Hide the button
+      playBtn.style.display = 'none';
+
+      // Redirect after 6 seconds
+      setTimeout(() => {
+        window.location.href = "{{ url_for('home') }}";
+      }, 15000);
+    } catch (err) {
+      alert('Could not play sound. Please check browser permissions.');
+    }
+  });
+</script>
+
+<style>
+@keyframes bounce-in {
+  0%   { transform: scale(0.3); opacity: 0; }
+  50%  { transform: scale(1.1); opacity: 1; }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+</style>
+
+{% endblock %}

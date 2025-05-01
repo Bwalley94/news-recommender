@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block title %}Chatbot{% endblock %}
+{% block content %}
+<div class="chat-container">
+    <div class="header">
+        <h2>🗞️ Talk to Our News Bot 🤖</h2>
+        <button id="dark-mode-toggle">🌗 Toggle Dark Mode</button>
+    </div>
+
+    <div class="welcome-message">
+        Welcome, {{ current_user.email }} 👋
+    </div>
+
+    <div id="chat-messages"></div>
+
+    <div id="typing-indicator" style="display:none;">🤖 Bot is typing...</div>
+
+    <form id="chat-form">
+        <input type="text" id="user-message" name="message" placeholder="Type your message..." required>
+        <button type="submit" id="send-button">Send 🚀</button>
+    </form>
+</div>
+
+<style>
+.chat-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    animation: fadeIn 1.2s ease-in-out;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.welcome-message {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #4CAF50;
+    font-weight: bold;
+    text-align: center;
+}
+
+#chat-messages {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+    color: #000000;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+
+.message {
+    max-width: 75%;
+    padding: 10px;
+    border-radius: 15px;
+    animation: fadeIn 0.5s;
+    word-wrap: break-word;
+    font-size: 16px;
+}
+
+.user-message {
+    background-color: #d1e7dd;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.bot-message {
+    background-color: #e2e3e5;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.timestamp {
+    display: block;
+    font-size: 0.7em;
+    color: #777;
+    margin-top: 5px;
+}
+
+#chat-form {
+    display: flex;
+    margin-top: 15px;
+}
+
+#user-message {
+    flex-grow: 1;
+    padding: 10px;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#send-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#send-button:hover {
+    background-color: #45a049;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#dark-mode-toggle {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+#typing-indicator {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+    text-align: left;
+}
+
+.dark-mode {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+}
+
+.dark-mode #chat-messages {
+    background-color: #333 !important;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chat-form');
+    const chatMessages = document.getElementById('chat-messages');
+    const typingIndicator = document.getElementById('typing-indicator');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    addBotMessage("Hello! 👋 I'm your News Assistant. Ask me anything! 🌟");
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const userInput = document.getElementById('user-message').value.trim();
+        if (userInput === '') return;
+
+        addUserMessage(userInput);
+        document.getElementById('user-message').value = '';
+
+        typingIndicator.style.display = 'block';
+
+        fetch('/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `message=${encodeURIComponent(userInput)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                addBotMessage(data.reply);
+            }, 800);
+        });
+    });
+
+    function addUserMessage(text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message user-message';
+        msgDiv.innerHTML = `${text}<div class="timestamp">${getCurrentTime()}</div>`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addBotMessage(text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message bot-message';
+        msgDiv.innerHTML = `${text}<div class="timestamp">${getCurrentTime()}</div>`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    }
+
+    darkModeToggle.addEventListener('click', function() {
+        document.querySelector('.chat-container').classList.toggle('dark-mode');
+    });
+});
+</script>
+{% endblock %}

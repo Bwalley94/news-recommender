@@ -1,0 +1,41 @@
+{% extends "base.html" %} 
+
+{% block title %}Login - News Recommender{% endblock %} 
+
+{% block content %} 
+
+<div class="login-container"> 
+
+    <h2>Login</h2> 
+
+    <form method="POST"> 
+
+        <p><label>Email:</label><br><input type="text" name="email" required></p> 
+
+        <p><label>Password:</label><br><input type="password" name="password" required></p> 
+
+        <button type="submit">Login</button> 
+
+    </form> 
+
+    <p style="text-align: center;"> 
+
+        <a href="{{ url_for('reset_password') }}" style="color: #ffd700;">Forgot Password?</a> 
+
+    </p> 
+
+     
+
+</div> 
+
+{% endblock %} 
+
+ 
+
+{% if error %} 
+
+    <p style="color:red;">{{ error }}</p> 
+
+{% endif %} 
+
+ 
